@@ -26,7 +26,8 @@
             // Decimal precision to use when setting CSS values
             "precision"             : 3,
             // The min num of chars a line has to contain
-            "minCharsPerLine"       : 0
+            "minCharsPerLine"       : 0,
+            "viewportHeight"        : 10
             };
         
         // Add the slabtexted classname to the body to initiate the styling of
@@ -52,6 +53,7 @@
                 precision           = settings.precision,
                 resizeThrottleTime  = settings.resizeThrottleTime,
                 minCharsPerLine     = settings.minCharsPerLine,
+                viewportHeight      = settings.viewportHeight,
                 resizeThrottle      = null,
                 viewportWidth       = $(window).width(),
                 headLink            = $this.find("a:first").attr("href") || $this.attr("href"),
@@ -76,7 +78,8 @@
             var resizeSlabs = function resizeSlabs() {
                     
                 // Cache the parent containers width       
-                var parentWidth = $this.width(),
+                //var parentWidth = $this.width(),
+                var parentWidth = $(document).width(),
                     fs;
                 
                 // Remove the slabtextdone and slabtextinactive classnames to enable the inline-block shrink-wrap effect
@@ -96,10 +99,14 @@
                 // then recalculate the "characters per line" count and re-render the inner spans
                 // Setting "forceNewCharCount" to false will save CPU cycles...                                                                                           
                 if(!keepSpans && (forceNewCharCount || fs != origFontSize)) {
-                            
                     origFontSize = fs;
-                    
-                    var newCharPerLine      = Math.min(60, Math.floor(parentWidth / (origFontSize * fontRatio))),
+                    //var idealLineAspectRatio = fontRatio * origFontSize;
+                    var idealLineAspectRatio = fontRatio * 12;
+                    var idealLineHeight = Math.max(1, parentWidth/idealLineAspectRatio);
+                    viewportHeight = $(this).height() - 20;
+                    var lineCount = Math.max(1, Math.floor(viewportHeight/idealLineHeight));
+                    //var newCharPerLine      = Math.min(60, Math.floor(parentWidth / (origFontSize * fontRatio))),
+                    var newCharPerLine      = Math.min(60, Math.round($this.text().length/lineCount )),
                         wordIndex           = 0,
                         lineText            = [],
                         counter             = 0,                                                                        
