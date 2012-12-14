@@ -11,9 +11,11 @@ describe("SlabText", function() {
 
    it("should wrap each line in a span with class slabtext", function(){
       expect($('#slabbedDiv')).toContain('span.slabtext');
-
    });
    
+   it("should include a class slabtextdone after rendering", function(){
+      expect($('#slabbedDiv')).toHaveClass('slabtextdone');
+   });
 
    describe("viewportBreakpoint is larger  than window width", function(){
       it("should set class to slabtextinactive", function(){
